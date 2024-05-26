@@ -2,7 +2,6 @@
 <html lang="en-UK">
 <head>
     <style>
-        /* Apply dark mode styles */
         body {
             background-color: #121212;
             color: #ffffff;
@@ -12,8 +11,8 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            padding: 20px; /* Added padding to the body */
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            padding: 20px;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
         #header h1 {
@@ -26,7 +25,7 @@
             grid-gap: 10px;
             align-content: center;
             justify-items: center;
-            box-sizing: border-box; /* Ensure padding and border are included in the total width and height */
+            box-sizing: border-box;
         }
         .overlay {
             position: absolute;
@@ -80,11 +79,8 @@
             let playerWidth, playerHeight;
 
             if (numVideos === 1) {
-                // Make the single video larger and center it
                 playerWidth = container.offsetWidth * 0.7;
                 playerHeight = playerWidth * 0.5625; // Maintain 16:9 aspect ratio
-
-                // Center the single video
                 container.style.display = 'flex';
                 container.style.justifyContent = 'center';
                 container.style.alignItems = 'center';
@@ -93,9 +89,8 @@
                 playerDiv.style.width = `${playerWidth}px`;
                 playerDiv.style.height = `${playerHeight}px`;
             } else {
-                // Adjust video size based on number of videos
                 playerWidth = container.offsetWidth / Math.ceil(Math.sqrt(numVideos)) - 100;
-                playerHeight = playerWidth * 0.5625; // Maintain 16:9 aspect ratio
+                playerHeight = playerWidth * 0.5625;
 
                 playerDiv.style.width = `${playerWidth}px`;
                 playerDiv.style.height = `${playerHeight}px`;
