@@ -49,7 +49,7 @@
             display: none;
         }
     </style>
-    <title></title>
+    <title>Fun Video API</title>
 </head>
 <body>
 <div id="header"><h1>Fun Video API 😆</h1></div>
@@ -112,6 +112,12 @@
                 players[0].playVideo();
                 this.classList.add('hidden');
             });
+        }
+
+        // Cleanup the URL parameters
+        if (window.history.pushState) {
+            const newUrl = window.location.origin + window.location.pathname;
+            window.history.pushState({ path: newUrl }, '', newUrl);
         }
     }
 
