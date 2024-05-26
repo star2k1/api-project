@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Apply dark mode styles */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px; /* Added padding to the body */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            font-family: Arial, sans-serif;
+        }
+        #header h1 {
+            margin: 10px;
+        }
+        #player-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 10px;
+            align-content: center;
+            justify-items: center;
+            box-sizing: border-box; /* Ensure padding and border are included in the total width and height */
+        }
+        .player {
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .overlay img {
+            width: 100px;
+            height: 100px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="header"><h1>Fun Video API 😆</h1></div>
+
+<script>
+    let players = [];
+
+    function getVideoIdsFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idsString = urlParams.get('ids');
+        return idsString ? idsString.split(',') : [];
+    }
+
+    function onYouTubeIframeAPIReady() {
+        const videoIds = getVideoIdsFromUrl();
+        const container = document.getElementById('player-container');
+        container.innerHTML = ''; // Clear any existing content
+
+        const numVideos = videoIds.length;
+
+        videoIds.forEach((id, index) => {
+            const playerDiv = document.createElement('div');
+            playerDiv.classList.add('player');
+            playerDiv.innerHTML = `<div id="player-${index}"></div>`;
+            container.appendChild(playerDiv);
+
+            let playerWidth, playerHeight;
+
+            if (numVideos === 1) {
+                // Make the single video larger and center it
+                playerWidth = container.offsetWidth * 0.7;
+                playerHeight = playerWidth * 0.5625; // Maintain 16:9 aspect ratio
+
+                // Center the single video
+                container.style.display = 'flex';
+                container.style.justifyContent = 'center';
+                container.style.alignItems = 'center';
+                container.style.height = '100%';
+
+                playerDiv.style.width = `${playerWidth}px`;
+                playerDiv.style.height = `${playerHeight}px`;
+            } else {
+                // Adjust video size based on number of videos
+                playerWidth = container.offsetWidth / Math.ceil(Math.sqrt(numVideos)) - 100;
+                playerHeight = playerWidth * 0.5625; // Maintain 16:9 aspect ratio
+
+                playerDiv.style.width = `${playerWidth}px`;
+                playerDiv.style.height = `${playerHeight}px`;
+            }
+
+            players[index] = new YT.Player(`player-${index}`, {
+                height: playerHeight,
+                width: playerWidth,
+                videoId: id.trim(),
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        });
+
+        if (numVideos === 1) {
+            document.querySelector('.overlay').classList.remove('hidden');
+            document.querySelector('.overlay').addEventListener('click', function() {
+                players[0].playVideo();
+                this.classList.add('hidden');
+            });
+        }
+    }
+
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+</script>
+<div id="player-container"></div>
+<div id="overlay" class="overlay hidden">
+    <img src="https://img.icons8.com/ios-filled/100/ffffff/play--v1.png" alt="Play">
+</div>
+<script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
