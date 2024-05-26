@@ -1,5 +1,6 @@
 package com.brainrot.brainrotvideoapi.services;
 
+import com.brainrot.brainrotvideoapi.models.dto.Video;
 import com.brainrot.brainrotvideoapi.repositories.VideosRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,18 +21,18 @@ public class VideosService {
     }
 
     public String addNew(String videoUrl) {
-        repository.addVideo(videoUrl);
+        repository.addVideoUrl(videoUrl);
         return "New video added successfully";
     }
 
     public String playAll() {
-        List<String> allVideos = repository.getAllVideos();
+        List<Video> allVideos = repository.getAllVideos();
         StringBuilder videoIds = new StringBuilder();
-        for (String videoId : allVideos) {
+        for (Video video : allVideos) {
             if (!videoIds.isEmpty()) {
                 videoIds.append(",");
             }
-            videoIds.append(videoId);
+            videoIds.append(video.getId());
         }
         String fullUrl = baseUrl + "?ids=" + videoIds;
         playVideo(fullUrl);
@@ -39,10 +40,10 @@ public class VideosService {
     }
 
     public String playRandom() {
-        String videoId = repository.getRandomVideoId();
-        String fullUrl = baseUrl + "?ids=" + videoId;
+        Video vid = repository.getRandomVideo();
+        String fullUrl = baseUrl + "?ids=" + vid.getId();
         playVideo(fullUrl);
-        return "Playing random video...";
+        return "Playing random video from " + vid + "...";
     }
 
     public void playVideo(String fullUrl) {

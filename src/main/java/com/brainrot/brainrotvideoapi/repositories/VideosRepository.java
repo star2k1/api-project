@@ -1,5 +1,6 @@
 package com.brainrot.brainrotvideoapi.repositories;
 
+import com.brainrot.brainrotvideoapi.models.dto.Video;
 import org.springframework.stereotype.Repository;
 
 import java.net.URLDecoder;
@@ -15,20 +16,24 @@ public class VideosRepository {
 
     private static final Random r = new Random();
 
-    public String getRandomVideoId() {
-        return extractVideoId(VIDEO_URLS.get(r.nextInt(0, VIDEO_URLS.size())));
+    public Video getRandomVideo() {
+        String randomVideoUrl = VIDEO_URLS.get(r.nextInt(0, VIDEO_URLS.size()));
+        return new Video(extractVideoId(randomVideoUrl), randomVideoUrl);
     }
 
-    public void addVideo(String videoUrl) {
+    public void addVideoUrl(String videoUrl) {
         VIDEO_URLS.add(URLDecoder.decode(videoUrl, StandardCharsets.UTF_8));
     }
 
-    public List<String> getAllVideos() {
-        List<String> videoIds = new ArrayList<>();
-        for (String videoId : VIDEO_URLS) {
-            videoIds.add(extractVideoId(videoId));
+    public List<Video> getAllVideos() {
+        List<Video> videos = new ArrayList<>();
+        for (String videoUrl : VIDEO_URLS) {
+            videos.add(new Video(
+                    extractVideoId(videoUrl),
+                    videoUrl
+            ));
         }
-        return videoIds;
+        return videos;
     }
 
     private static final List<String> VIDEO_URLS = new ArrayList<>(List.of(
