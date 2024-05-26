@@ -50,7 +50,7 @@ public class VideosRepository {
 
     public static String extractVideoId(String youtubeUrl) {
         String videoId = null;
-        String pattern = "(?<=watch\\?v=)[^#\\&\\?\\n]*";
+        String pattern = "(?<=watch\\?v=)[^#&?\\n]*";
         Pattern compiledPattern = Pattern.compile(pattern);
         Matcher matcher = compiledPattern.matcher(youtubeUrl);
 

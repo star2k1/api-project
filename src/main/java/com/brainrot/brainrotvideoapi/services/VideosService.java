@@ -28,12 +28,12 @@ public class VideosService {
         List<String> allVideos = repository.getAllVideos();
         StringBuilder videoIds = new StringBuilder();
         for (String videoId : allVideos) {
-            if (videoIds.length() > 0) {
+            if (!videoIds.isEmpty()) {
                 videoIds.append(",");
             }
             videoIds.append(videoId);
         }
-        String fullUrl = baseUrl + "?ids=" + videoIds.toString();
+        String fullUrl = baseUrl + "?ids=" + videoIds;
         playVideo(fullUrl);
         return "Playing all videos...";
     }
@@ -62,7 +62,6 @@ public class VideosService {
             System.out.println("HTML page opened successfully.");
         } catch (IOException e) {
             System.err.println("Error opening HTML page: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
